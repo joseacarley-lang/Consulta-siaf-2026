@@ -1,2 +1,4 @@
 # Make sure the hf CLI is installed
 curl -LsSf https://hf.co/cli/install.sh | bash
+# Download the Space
+hf download Acarley1986/Consulta-siaf
