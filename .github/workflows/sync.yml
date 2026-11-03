@@ -1,0 +1,19 @@
+name: Sincronizar con Hugging Face
+on:
+  push:
+    branches: [ main ] # Cambiar a 'master' si tu rama principal se llama así
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Subir a Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: git push --force https://Acarley196:$HF_TOKEN@huggingface.co/spaces/tu_usuario_hf/Siaf main
