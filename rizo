@@ -1,0 +1,2 @@
+# Make sure the hf CLI is installed
+curl -LsSf https://hf.co/cli/install.sh | bash
