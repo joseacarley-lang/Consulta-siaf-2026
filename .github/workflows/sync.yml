@@ -1,7 +1,7 @@
 name: Sincronizar con Hugging Face
 on:
   push:
-    branches: [ main ] # Cambiar a 'master' si tu rama principal se llama así
+    branches: [ main ] # Si tu rama principal se llama master, cambia main por master
 
 jobs:
   sync-to-hub:
@@ -16,4 +16,4 @@ jobs:
       - name: Subir a Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://Acarley1986:$HF_TOKEN@huggingface.co/spaces/Acarley1986/Siaf
+        run: git push --force https://github-actions:$HF_TOKEN@huggingface.co/spaces/ACARLEY1986/Consulta Siaf 2026 main
