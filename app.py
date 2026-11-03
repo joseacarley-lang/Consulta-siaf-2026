@@ -1,58 +1,53 @@
 import os
-import requests
-from flask import Flask, render_template_string, request, Response, session
+from flask import Flask, render_template_string
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta_render_siaf_2026'
-
-# URL oficial actualizada del servidor APPS2 del MEF
-MEF_BASE_URL = "https://apps2.mef.gob.pe/consulta-vfp-webapp/"
-
-# Cabeceras estándar para simular una petición legítima de navegador
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-    "Accept-Language": "es-ES,es;q=0.9",
-    "Referer": f"{MEF_BASE_URL}consultaExpediente.jspx"
-}
+app.secret_key = 'solucion_definitiva_siaf_2026'
 
 @app.route('/')
 def index():
+    # El truco consiste en cargar la interfaz del MEF de manera sutil e inyectar el código 
+    # mediante una ventana incrustada controlada por JavaScript
     html_interface = """
     <!DOCTYPE html>
     <html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SIAF 2026 - Consulta Rápida</title>
+        <title>SIAF 2026 - Consulta Directa</title>
         <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; padding: 15px; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 90vh; margin: 0; }
-            .card { background: #ffffff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 360px; }
-            h2 { text-align: center; color: #1a1a1a; font-size: 1.3rem; margin: 0 0 5px 0; }
-            .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 25px; }
-            label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 0.9rem; }
-            input[type="text"] { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; margin-bottom: 15px; background-color: #f9f9f9; }
-            input[type="text"]:focus { border-color: #007bff; background-color: #fff; outline: none; }
-            .captcha-area { text-align: center; background: #f8f9fa; padding: 12px; border-radius: 6px; border: 1px dashed #ccc; margin-bottom: 15px; }
-            .captcha-img { max-width: 160px; height: 50px; display: block; margin: 0 auto 8px; border-radius: 4px; }
-            .refresh-link { font-size: 0.8rem; color: #007bff; text-decoration: none; cursor: pointer; font-weight: bold; }
-            .btn-submit { width: 100%; background-color: #007bff; color: #ffffff; border: none; padding: 14px; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
-            .btn-submit:hover { background-color: #0056b3; }
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; padding: 10px; background-color: #f0f2f5; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+            .card { background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 360px; margin-top: 20px; box-sizing: border-box; }
+            h2 { text-align: center; color: #1a1a1a; font-size: 1.2rem; margin: 0 0 5px 0; }
+            .subtitle { text-align: center; color: #666; font-size: 0.85rem; margin-bottom: 15px; }
+            label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; font-size: 0.85rem; }
+            input[type="text"] { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; margin-bottom: 12px; background-color: #f9f9f9; }
+            .btn-submit { width: 100%; background-color: #25D366; color: #ffffff; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 5px; }
+            .btn-submit:hover { background-color: #128C7E; }
+            .mef-frame { width: 100%; height: 260px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 12px; background-color: #fff; }
+            .steps { font-size: 0.8rem; color: #555; background: #fff3cd; padding: 10px; border-radius: 6px; margin-bottom: 12px; border: 1px solid #ffeeba; }
         </style>
     </head>
     <body>
+
     <div class="card">
-        <h2>Consulta de Expediente</h2>
+        <h2>Consulta Rápida MEF</h2>
         <div class="subtitle">SIAF Año 2026 | UE: 301250</div>
         
-        <form action="/buscar" method="POST">
+        <div class="steps">
+            <strong>Instrucciones para el personal:</strong><br>
+            1. Escribe abajo el número de expediente.<br>
+            2. Copia el captcha tal como aparece en el cuadro inferior.<br>
+            3. Haz clic en Buscar.
+        </div>
+
+        <form action="https://mef.gob.pe" method="POST" target="_blank">
+            <!-- Parámetros fijos ocultos automatizados por debajo -->
+            <input type="hidden" name="anoEje" value="2026">
+            <input type="hidden" name="secEjec" value="301250">
+            
             <label for="expediente">Número de Expediente</label>
             <input type="text" id="expediente" name="expediente" maxlength="10" placeholder="Ej. 0000456" required autocomplete="off">
-            
-            <div class="captcha-area">
-                <img class="captcha-img" src="/ver-captcha" id="captcha_img" alt="Cargando CAPTCHA...">
-                <a onclick="document.getElementById('captcha_img').src='/ver-captcha?'+new Date().getTime();" class="refresh-link">Cambiar imagen</a>
-            </div>
             
             <label for="j_captcha">Código de la Imagen</label>
             <input type="text" id="j_captcha" name="j_captcha" maxlength="5" placeholder="Ingresa las letras" required autocomplete="off">
@@ -60,46 +55,17 @@ def index():
             <button type="submit" class="btn-submit">Buscar Expediente</button>
         </form>
     </div>
+
+    <div class="card" style="margin-top: 15px; padding: 12px;">
+        <label>Área de Seguridad (Validación MEF)</label>
+        <!-- Incrustamos la web original para heredar de manera segura la IP del celular y cargar el captcha -->
+        <iframe class="mef-frame" src="https://apps2.mef.gob.pe/consulta-vfp-webapp/consultaExpediente.jspx" scrolling="no"></iframe>
+    </div>
+
     </body>
     </html>
     """
     return render_template_string(html_interface)
-
-@app.route('/ver-captcha')
-def ver_captcha():
-    client_session = requests.Session()
-    # Primero hacemos una petición sutil a la página principal para abrir la sesión legítimamente
-    client_session.get(f"{MEF_BASE_URL}consultaExpediente.jspx", headers=HEADERS, verify=False)
-    
-    # Ahora descargamos la imagen vinculada a esa sesión abierta
-    captcha_response = client_session.get(f"{MEF_BASE_URL}Captcha.jpg", headers=HEADERS, verify=False)
-    
-    # Almacenamos la cookie generada para el envío posterior del formulario
-    session['mef_cookie'] = client_session.cookies.get_dict()
-    
-    return Response(captcha_response.content, mimetype='image/jpeg')
-
-@app.route('/buscar', methods=['POST'])
-def buscar():
-    expediente = request.form.get('expediente')
-    j_captcha = request.form.get('j_captcha')
-    saved_cookies = session.get('mef_cookie', {})
-    
-    client_session = requests.Session()
-    client_session.cookies.update(saved_cookies)
-    
-    payload = {
-        'anoEje': '2026',
-        'secEjec': '301250',
-        'expediente': expediente,
-        'j_captcha': j_captcha
-    }
-    
-    post_headers = HEADERS.copy()
-    post_headers["Origin"] = "https://apps2.mef.gob.pe"
-    
-    response = client_session.post(f"{MEF_BASE_URL}actionConsultaExpediente.jspx", data=payload, headers=post_headers, verify=False)
-    return response.text
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
