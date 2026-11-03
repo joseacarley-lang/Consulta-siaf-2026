@@ -5,7 +5,8 @@ from flask import Flask, render_template_string, request, Response, session
 app = Flask(__name__)
 app.secret_key = 'clave_secreta_render_siaf'
 
-MEF_BASE_URL = "https://mef.gob.pe" 
+MEF_BASE_URL = "https://apps2.mef.gob.pe/consulta-vfp-webapp/"
+ 
 
 @app.route('/')
 def index():
