@@ -16,4 +16,4 @@ jobs:
       - name: Subir a Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://github-actions:$HF_TOKEN@huggingface.co/spaces/Acarley1986/Siaf main
+        run: git push --force https://github-actions:$HF_TOKEN@huggingface.co/spaces/Acarley1986/Siaf
